@@ -20,11 +20,21 @@ export class UsersController {
     
     return this.usersService.getUsers();
   }
+  
+  @Get(':id/notes/:nId/note-items')
+  findNoteItemsByUserIdAndNoteId(@Param('id') id: string, @Param('nId') nId: string) {
+    console.log("test");
+    return this.usersService.getNoteItemsByUserIdAndNoteId(id, nId);
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.usersService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.getUser(id);
+  }
+
+
+  
+
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
@@ -38,6 +48,6 @@ export class UsersController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.removeUser(id);
   }
 }

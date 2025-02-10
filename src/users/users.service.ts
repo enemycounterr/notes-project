@@ -2,10 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { NoteService } from 'src/note/note.service';
+import { NoteItemsService } from 'src/note-items/note-items.service';
+import { privateDecrypt } from 'crypto';
 
 @Injectable()
 export class UsersService {
-  private readonly users: CreateUserDto[] = [
+  private users: CreateUserDto[] = [
     {
       id: "0",
       name: "ann",
@@ -20,9 +22,32 @@ export class UsersService {
     }
   ];
   // constructor(private readonly noteService: NoteService){}
-  constructor(@Inject(NoteService) private readonly noteService: NoteService) { }
+  constructor(
+    @Inject(NoteService) private readonly noteService: NoteService,
+    @Inject(NoteItemsService) private readonly noteItemService: NoteItemsService ) {}
 
-
+  public getNoteItemsByUserIdAndNoteId(userId: string, noteId: string){
+      const foundNotes = this.noteService.getNotes().filter(note => note.userId === userId);
+     
+      if (!foundNotes || foundNotes.length === 0) {
+        return `No one notes were found with this ${userId}`;
+      }
+      console.log(`noteId - ${noteId}`);
+      const foundNotesItem = foundNotes.map(note => {
+          
+          const result = this.noteItemService.getNoteItems().filter(noteItem => {
+            
+            return noteItem.noteId === noteId;
+            
+          })
+          return result;
+        });
+      
+      if (!foundNotesItem || foundNotesItem.length === 0) {
+        return `No one notes items were found with this ${noteId}`;
+      }
+      return foundNotesItem;
+  }
   // private isEmpty(user: CreateUserDto){
   //   const originalKeys = Object.keys(new CreateUserDto());
   //   const keys: string[] = Object.keys(user);
@@ -51,29 +76,29 @@ export class UsersService {
     //   throw new NoteException('User not found');
     // }
 
-    const newUser = { 
+    const newUser = {
       id: this.generateId(),
       name: user.name,
       password: user.password,
       email: user.email
-      };
-      
-    
+    };
+
+
     this.users.push(newUser)
     // this.isEmpty(user);
 
   }
-  
+
   private generateId(): string {
     const currentSize = this.users.length;
-    if (currentSize === 0){
-        return '0';
+    if (currentSize === 0) {
+      return '0';
     }
 
     const idNumber = Number(this.users[currentSize - 1].id) + 1;
-    
+
     return idNumber.toString();
-}
+  }
 
   public getUser(id: string): CreateUserDto {
     const user = this.users.find(user => user.id === id);
@@ -94,7 +119,7 @@ export class UsersService {
     }
 
     // const updatedNote = { ...this.notes[noteIndex], ...updateNoteDto };
-   
+
     const updatedUser = {
       id: this.users[userIndex].id,
       name: updateUserDto.name ? updateUserDto.name : this.users[userIndex].name,
@@ -107,7 +132,13 @@ export class UsersService {
 
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  public removeUser(id: string): void {
+    const resultingArray: CreateUserDto[] = this.users.filter(user => user.id !== id);
+
+    if (resultingArray.length === this.users.length) {
+      console.log('No user found');
+    }
+
+    this.users = resultingArray;
   }
 }
