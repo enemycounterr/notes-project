@@ -12,23 +12,28 @@ export class NoteItemsController {
     return this.noteItemsService.createNoteItem(createNoteItemDto);
   }
 
+  @Get()
+  findAllNoteItems(){
+    return this.noteItemsService.getAllNoteItems();
+  }
+  
   @Get(':id')
-  findAll(@Param('id') noteId: string) {
-    return this.noteItemsService.findAll(noteId);
+  findNoteItemById(@Param('id') noteId: string) {
+    return this.noteItemsService.getNoteItem(noteId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.noteItemsService.getNoteItem(id);
-  }
+  // @Get('get-one/:id')
+  // findOne(@Param('id') id: string) {
+  //   return this.noteItemsService.getNoteItem(id);
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateNoteItemDto: UpdateNoteItemDto) {
-    return this.noteItemsService.updateNoteItem(id, updateNoteItemDto);
+    return this.noteItemsService.updateNoteItem(Number(id), updateNoteItemDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.noteItemsService.removeNoteItem(id);
+    return this.noteItemsService.deleteNoteItem(Number(id));
   }
 }

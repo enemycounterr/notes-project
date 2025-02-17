@@ -63,8 +63,6 @@ export class NoteService {
         if (noteIndex === -1) {
             throw new NotFoundException(`Note with ID ${id} not found`);
         }
-
-        // const updatedNote = { ...this.notes[noteIndex], ...updateNoteDto };
         console.log(updateNoteDto);
         const updatedNote = { 
             id: this.notes[noteIndex].id,
