@@ -1,7 +1,7 @@
 import { IsNotEmpty } from "class-validator";
 
 export class CreateNoteItemDto {
-    public readonly id : string;
+    public readonly id : number;
     @IsNotEmpty()
     public type : string;
     @IsNotEmpty()

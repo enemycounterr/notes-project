@@ -11,8 +11,12 @@ export class NoteController {
 
     @Get()
     public findAll(): CreateNoteDto[] {
-       
         return this.noteService.getNotes();
+    }
+
+    @Get(':id')
+    public findone(@Param('id') id: string): CreateNoteDto {
+        return this.noteService.getNote(Number(id));
     }
 
     @Post()
