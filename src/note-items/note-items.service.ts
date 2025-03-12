@@ -49,8 +49,7 @@ export class NoteItemsService {
   // ]
 
   constructor(
-    @InjectRepository(NoteItem)
-    private noteItemRepository: Repository<NoteItemEntity>
+    @InjectRepository(NoteItem) private noteItemRepository: Repository<NoteItemEntity>
   ) { }
 
   // public createNoteItem(noteItem: CreateNoteItemDto) {
@@ -72,6 +71,7 @@ export class NoteItemsService {
   //   }
   //   return foundNoteItems;
   // }
+
 
   public async getAllNoteItems() {
     return this.noteItemRepository.find();
@@ -117,30 +117,12 @@ export class NoteItemsService {
     }
   }
 
-  // public updateNoteItem(id: string, updateNoteItemDto: UpdateNoteItemDto) {
-  //   const noteItemIndex = this.noteItems.findIndex(item => item.id === id);
+  public async getNoteItemsAndCount(){
+    const [noteItems, total] = await this.noteItemRepository.findAndCount();
+    return {
+      items: noteItems,
+      totalCount: total
+    }
+  }
 
-  //   if (noteItemIndex === -1) {
-  //     console.log(`Note with ID ${id} not found`);
-  //   }
-  //   const updatedItem = {
-  //     id: this.noteItems[noteItemIndex].id,
-  //     type: updateNoteItemDto.type ? updateNoteItemDto.type : this.noteItems[noteItemIndex].type,
-  //     noteId: updateNoteItemDto.noteId ? updateNoteItemDto.noteId : this.noteItems[noteItemIndex].noteId,
-  //     data: updateNoteItemDto.data ? updateNoteItemDto.data : this.noteItems[noteItemIndex].data
-  //   };
-
-  //   this.noteItems[noteItemIndex] = updatedItem;
-  //   return updatedItem;
-  // }
-
-  // public removeNoteItem(id: string) {
-  //   const resultingArray: CreateNoteItemDto[] = this.noteItems.filter(item => item.id !== id);
-
-  //   if (resultingArray.length === this.noteItems.length) {
-  //     console.log('No user found');
-  //   }
-
-  //   this.noteItems = resultingArray;
-  // }
 }
