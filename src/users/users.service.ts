@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import UserEntity from './entities/user.entity';
 import RegisterDTO from 'src/authentication/dto/register.dto';
 import AddressEntity from './entities/address.entity';
+import NoteEntity from 'src/note/entities/note.entity';
 
 @Injectable()
 export class UsersService {
@@ -31,7 +32,8 @@ export class UsersService {
     @Inject(NoteService) private readonly noteService: NoteService,
     @Inject(NoteItemsService) private readonly noteItemService: NoteItemsService,
     @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
-    @InjectRepository(AddressEntity) private addressRepository: Repository<AddressEntity>
+    @InjectRepository(AddressEntity) private addressRepository: Repository<AddressEntity>,
+    @InjectRepository(NoteEntity) private noteRepository: Repository<NoteEntity>
   ) { }
 
   getNoteItemsByUserIdAndNoteId(userId: string, noteId: string) {
@@ -69,15 +71,24 @@ export class UsersService {
   async getUserWithNotes(userId: number) {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
-      relations: ['notes'] 
+      relations: ['notes']
     });
-
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
+    return user;
+  }
 
-    return user; 
-
+  async getNameOfUserNotes(noteId: number) {
+    const note = await this.noteRepository.findOne({
+      where: { id: noteId },
+      relations: ['user']
+    });
+    if (note) {
+      return note.user.name;
+    } else {
+      throw new HttpException('Note not found', HttpStatus.NOT_FOUND); 
+    }
   }
 
 

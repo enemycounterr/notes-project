@@ -40,6 +40,11 @@ export class UsersController {
   findUserWithNotes(@Param('id') id: string){
     return this.usersService.getUserWithNotes(Number(id));
   }
+  //@ONE TO MANY
+  @Get(':id/user-name-notes')
+  findUserNameOfNotes(@Param('id') id: string){
+    return this.usersService.getNameOfUserNotes(Number(id));
+  }
   
   @Get(':id/notes/:nId/note-items')
   findNoteItemsByUserIdAndNoteId(@Param('id') id: string, @Param('nId') nId: string) {

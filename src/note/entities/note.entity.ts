@@ -10,6 +10,9 @@ class NoteEntity {
   public title: string;
 
   @Column()
+  public content: string;
+
+  @Column()
   public date: string;
 
   @Column()

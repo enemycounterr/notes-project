@@ -13,6 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
+        request?.body
         return request?.cookies?.Authentication;
       }]),
       secretOrKey: configService.get('JWT_SECRET')!
@@ -20,6 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
  
   async validate(payload: TokenPayload) {
+    console.log("from validate " + payload.userId);
     return this.userService.getUserById(payload.userId);
   }
 }
