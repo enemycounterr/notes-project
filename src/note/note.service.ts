@@ -6,10 +6,14 @@ import NoteEntity from './entities/note.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { date } from '@hapi/joi';
+import UserEntity from 'src/users/entities/user.entity';
 
 @Injectable()
 export class NoteService {
-    constructor(@InjectRepository(NoteEntity) private noteRepository: Repository<NoteEntity>){}
+    constructor(
+      @InjectRepository(NoteEntity) private noteRepository: Repository<NoteEntity>,
+      @InjectRepository(UserEntity) private userRepository: Repository<UserEntity>
+    ){}
 
     async addNote(userId: string, note: CreateNoteDto) {
         const newNoteWithDate = {
@@ -37,6 +41,41 @@ export class NoteService {
           return note;
         }
         throw new HttpException('Note not found', HttpStatus.NOT_FOUND);
+    }
+
+    // async cloneNote(userId: string, id: string){
+    //   const userWithNotes = await this.noteRepository.find({
+    //     where: {
+    //       userId:userId
+    //     },
+    //     relations: ['user']
+    //   });
+    //   console.log("TEST");
+    //   console.log(userWithNotes);
+    //   return userWithNotes;
+    // }
+    async cloneNote(userId: string, nId: string){
+      const userWithNotes = await this.userRepository.findOne({
+        where: {
+          id:Number(userId)
+        },
+        relations: ['notes']
+      });
+      const clonedNote = userWithNotes?.notes.find((note)=> note.id === Number(nId));
+      const {id, ...noteWithoutId} = clonedNote!;
+      const created = await this.noteRepository.create(noteWithoutId);
+     
+      const noteItemsToClone = await this.noteRepository.findOne({
+        where:{
+          id:Number(nId)
+        },
+        relations: ['noteItems']
+
+      })
+      created.noteItems = noteItemsToClone?.noteItems!;
+      console.log(noteItemsToClone);
+      await this.noteRepository.save(created);
+      return created;
     }
 
      async updateNote(nId: number, noteData: UpdateNoteDto) {

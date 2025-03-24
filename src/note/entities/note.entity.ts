@@ -1,5 +1,6 @@
+import NoteItemEntity from "src/note-items/entities/note-item.entity";
 import UserEntity from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 class NoteEntity {
@@ -21,6 +22,9 @@ class NoteEntity {
   @ManyToOne(() => UserEntity, (user: UserEntity) => user.notes)
   public user: UserEntity;
 
+  @ManyToMany(() => NoteItemEntity, (noteItem: NoteItemEntity) => noteItem.notes)
+  @JoinTable()
+  public noteItems: NoteItemEntity[];
   
 }
 

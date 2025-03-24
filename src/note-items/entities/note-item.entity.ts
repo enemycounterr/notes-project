@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import NoteEntity from 'src/note/entities/note.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 class NoteItemEntity {
@@ -8,11 +9,14 @@ class NoteItemEntity {
   @Column()
   public type: string;
 
-  @Column()
-  public noteId: string;
+  // @Column()
+  // public noteId: string;
 
   @Column()
   public data: string;
+
+  @ManyToMany(() => NoteEntity, (note: NoteEntity) => note.noteItems)
+  public notes: NoteEntity[];
 }
 
 export default NoteItemEntity;

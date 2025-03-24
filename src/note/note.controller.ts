@@ -5,6 +5,7 @@ import { NoteExceptionFilter } from './filter/note-exception/note-exception.filt
 import { UpdateNoteDto } from './dto/note/update-note.dto';
 import JwtAuthenticationGuard from 'src/authentication/jwt-authentication.guard';
 import RequestWithUser from 'src/authentication/requestWithUser.interface';
+import { CloneNoteDto } from './dto/note/clone-note.dto';
 
 @Controller('notes')
 @UseFilters(new NoteExceptionFilter())
@@ -25,6 +26,12 @@ export class NoteController {
     @Get(':id')
     findOne(@Param('id') id: string) {
       return this.noteService.getNoteById(Number(id));
+    }
+
+    @Post('/clone')
+    @UseGuards(JwtAuthenticationGuard)
+    cloneNote(@Body() cloneNote: CloneNoteDto, @Req() request: RequestWithUser){
+      return this.noteService.cloneNote(String(request.user.id!), cloneNote.id);
     }
   
 

@@ -4,10 +4,11 @@ import { NoteItemsController } from './note-items.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import NoteItem from './entities/note-item.entity';
 import NoteItemEntity from './entities/note-item.entity';
+import NoteEntity from 'src/note/entities/note.entity';
 
 @Module({
   imports:[
-   TypeOrmModule.forFeature([NoteItemEntity])
+   TypeOrmModule.forFeature([NoteItemEntity, NoteEntity])
   ],
   controllers: [NoteItemsController],
   providers: [NoteItemsService],

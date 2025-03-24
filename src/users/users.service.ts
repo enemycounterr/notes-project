@@ -13,20 +13,6 @@ import NoteEntity from 'src/note/entities/note.entity';
 
 @Injectable()
 export class UsersService {
-  // private users: CreateUserDto[] = [
-  //   {
-  //     id: "0",
-  //     name: "ann",
-  //     password: "123",
-  //     email: "first@gmail.com"
-  //   },
-  //   {
-  //     id: "1",
-  //     name: "alex",
-  //     password: "f7",
-  //     email: "second@gmail.com"
-  //   }
-  // ];
 
   constructor(
     @Inject(NoteService) private readonly noteService: NoteService,

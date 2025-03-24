@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { NoteItemsService } from './note-items.service';
 import { CreateNoteItemDto } from './dto/create-note-item.dto';
 import { UpdateNoteItemDto } from './dto/update-note-item.dto';
 import JwtAuthenticationGuard from 'src/authentication/jwt-authentication.guard';
+import RequestWithUser from 'src/authentication/requestWithUser.interface';
 
 @Controller('note-items')
 export class NoteItemsController {
@@ -10,8 +11,8 @@ export class NoteItemsController {
 
   @Post()
   @UseGuards(JwtAuthenticationGuard)
-  create(@Body() createNoteItemDto: CreateNoteItemDto) {
-    return this.noteItemsService.createNoteItem(createNoteItemDto);
+  create(@Body() createNoteItemDto: CreateNoteItemDto, @Req() request : RequestWithUser) {
+    return this.noteItemsService.createNoteItem(createNoteItemDto, String(request.user.id!));
   }
 
   @Get("count")

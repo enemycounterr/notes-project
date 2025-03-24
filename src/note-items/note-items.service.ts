@@ -5,6 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import NoteItem from './entities/note-item.entity';
 import NoteItemEntity from './entities/note-item.entity';
 import { Repository } from 'typeorm';
+import NoteEntity from 'src/note/entities/note.entity';
+import { Note } from 'src/note/dto/note/note';
+import { CreateNoteDto } from 'src/note/dto/note/create-note.dto';
 
 @Injectable()
 export class NoteItemsService {
@@ -49,7 +52,8 @@ export class NoteItemsService {
   // ]
 
   constructor(
-    @InjectRepository(NoteItem) private noteItemRepository: Repository<NoteItemEntity>
+    @InjectRepository(NoteItemEntity) private noteItemRepository: Repository<NoteItemEntity>,
+    @InjectRepository(NoteEntity) private noteRepository: Repository<NoteEntity>
   ) { }
 
   // public createNoteItem(noteItem: CreateNoteItemDto) {
@@ -77,10 +81,24 @@ export class NoteItemsService {
     return this.noteItemRepository.find();
   }
 
-  public async createNoteItem(item: CreateNoteItemDto) {
+  public async createNoteItem(item: CreateNoteItemDto, userId: string) {
     const newItem = await this.noteItemRepository.create(item);
     await this.noteItemRepository.save(newItem);
-    return newItem;
+    let noteToAddItem = await this.noteRepository.findOne({
+      where:{
+        id: Number(item.noteId)
+      }
+    }) as NoteEntity;
+    if(!noteToAddItem){
+      const data = new CreateNoteDto();
+      data.content = "default created";
+      data.title = "default created";
+      data.userId = userId;
+      noteToAddItem = await this.noteRepository.create(data);
+    }
+    noteToAddItem!.noteItems = [newItem];
+    await this.noteRepository.save(noteToAddItem);
+    return noteToAddItem;
   }
 
   public async getNoteItem(noteItemId: string) {
