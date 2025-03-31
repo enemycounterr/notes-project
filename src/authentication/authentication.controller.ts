@@ -7,6 +7,7 @@ import { LocalAuthenticationGuard } from './localAuthentication.guard';
 import RequestWithUser from './requestWithUser.interface';
 import { Response } from 'express';
 import JwtAuthenticationGuard from './jwt-authentication.guard';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('authentication')
 export class AuthenticationController {
@@ -36,7 +37,22 @@ export class AuthenticationController {
 
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
-  @Post('log-in')
+  @Post('/log-in')
+  @ApiOperation({ summary: 'Log in and get JWT token' }) // Description of the operation
+  @ApiResponse({
+    status: 200,
+    description: 'User logged in successfully and JWT token set in cookie.',
+    schema: {
+      example: {
+        email: 'first@email.com',
+        password: '123', // Password should not be returned
+      }
+    }
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Invalid credentials.',
+  })
   async logIn(@Req() request: RequestWithUser, @Res() response: Response ) {
     const user = request.user;
     const cookie = this.authenticationService.getCookieWithJwtToken(user.id!);

@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './database/database.module';
 import { AuthenticationModule } from './authentication/authentication.module';
-import { CategoryModule } from './category/category.module';
+
 
 
 @Module({
@@ -28,7 +28,6 @@ import { CategoryModule } from './category/category.module';
     }),
     DatabaseModule,
     AuthenticationModule,
-    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

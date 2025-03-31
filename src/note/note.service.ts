@@ -14,7 +14,7 @@ export class NoteService {
       @InjectRepository(NoteEntity) private noteRepository: Repository<NoteEntity>,
       @InjectRepository(UserEntity) private userRepository: Repository<UserEntity>
     ){}
-
+    
     async addNote(userId: string, note: CreateNoteDto) {
         const newNoteWithDate = {
           ...note,
@@ -42,18 +42,7 @@ export class NoteService {
         }
         throw new HttpException('Note not found', HttpStatus.NOT_FOUND);
     }
-
-    // async cloneNote(userId: string, id: string){
-    //   const userWithNotes = await this.noteRepository.find({
-    //     where: {
-    //       userId:userId
-    //     },
-    //     relations: ['user']
-    //   });
-    //   console.log("TEST");
-    //   console.log(userWithNotes);
-    //   return userWithNotes;
-    // }
+    
     async cloneNote(userId: string, nId: string){
       const userWithNotes = await this.userRepository.findOne({
         where: {

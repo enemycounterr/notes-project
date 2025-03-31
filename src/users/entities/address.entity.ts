@@ -8,7 +8,19 @@ class AddressEntity {
  
   @Column()
   public street: string;
- 
+  
+  @Column({nullable: true})
+  public region:string;
+
+  @Column()
+  public longitude: string;
+  
+  @Column()
+  public precision: string;
+  
+  @Column()
+  public lattitude:string;
+
   @Column()
   public city: string;
  

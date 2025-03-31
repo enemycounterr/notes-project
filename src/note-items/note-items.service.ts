@@ -85,16 +85,17 @@ export class NoteItemsService {
     const newItem = await this.noteItemRepository.create(item);
     await this.noteItemRepository.save(newItem);
     let noteToAddItem = await this.noteRepository.findOne({
-      where:{
+      where: {
         id: Number(item.noteId)
       }
     }) as NoteEntity;
-    if(!noteToAddItem){
+    if (!noteToAddItem) {
       const data = new CreateNoteDto();
       data.content = "default created";
       data.title = "default created";
       data.userId = userId;
       noteToAddItem = await this.noteRepository.create(data);
+      await this.noteRepository.save(noteToAddItem);
     }
     noteToAddItem!.noteItems = [newItem];
     await this.noteRepository.save(noteToAddItem);
@@ -135,7 +136,7 @@ export class NoteItemsService {
     }
   }
 
-  public async getNoteItemsAndCount(){
+  public async getNoteItemsAndCount() {
     const [noteItems, total] = await this.noteItemRepository.findAndCount();
     return {
       items: noteItems,
