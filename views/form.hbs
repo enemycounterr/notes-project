@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/1362334b71.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Libre+Franklin:wght@200&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div class="container">
+
+      <form class="add text-center my-4">
+        <label class="text-light">Note Id{{ note.id}}</label>
+        <input class="form-control m-auto" type="text" name="add" value="{{ note.title }}" />
+        <input class="form-control m-auto" type="text" name="add" value="{{ note.content }}" />
+        <input class="form-control m-auto" type="text" name="add" value="{{ note.date }}"/>
+        <input class="form-control m-auto" type="text" name="add" value="{{ note.userId }}"/>
+        <br />
+        <div class="text-center">
+          <a href="/v6.5/notes/hbs-test" >
+            {{!-- <input type="submit" class="btn btn-light" /> --}}
+            <i class="fa fa-arrow-left "></i>
+          </a>  
+        </div>
+      </form>
+    </div>
+    
+
+
+    <script src="/form.js"></script>
+    
+  </body>
+</html>
