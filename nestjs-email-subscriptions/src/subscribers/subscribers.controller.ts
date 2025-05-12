@@ -12,6 +12,7 @@ export class SubscribersController {
 
   @MessagePattern({ cmd: 'add-subscriber' })
   addSubscriber(subscriber: CreateSubscriberDto) {
+    console.log("RECEIVED ", subscriber);
     return this.subscribersService.addSubscriber(subscriber);
   }
 
