@@ -18,7 +18,6 @@ export class SubscribersController {
 
   @MessagePattern({ cmd: 'get-all-subscribers' })
   getAllSubscribers() {
-    console.log("REQUEST FROM CODE SANDBOX");
     return this.subscribersService.getAllSubscribers();
   }
 

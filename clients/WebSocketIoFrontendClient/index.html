@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", function () {
+            const params = new URLSearchParams(window.location.search);
+            const email = params.get("email");
+            document.getElementById("subscriberEmail").innerHTML = email;
+            
+            // Connect using Socket.IO client
+            const socket = io("ws://localhost:3000"); // assumes Socket.IO backend on 3000
+            const role = params.get("role");
+            let creatorRole = (role === "admin") ? "admin" : "client";
+            socket.emit("createChat", {creator:creatorRole, membersEmails:[email]})
+
+            // Handle messages
+            socket.on("messageToChat", function (data) {
+                const output = document.getElementById("output");
+                output.innerHTML +=`${new Date().toISOString()} ${data}<br>`;
+            });
+
+            // Handle form submission
+            const form = document.querySelector(".foo");
+            const input = document.getElementById("input");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const inputText = input.value;
+                socket.emit("subscriberMessage", inputText); // Send message to server
+            });
+            
+
+        });
+    </script>
+    <style>
+        /* just some super basic css to make things bit more readable */
+        div {
+            margin: 10em;
+        }
+
+        form {
+            margin: 10em;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="foo">
+        <span id="subscriberEmail"></span>
+        <input id="input"></input>
+        <input type="submit"></input>
+    </form>
+    <div id="output"></div>
+</body>
+
+</html>

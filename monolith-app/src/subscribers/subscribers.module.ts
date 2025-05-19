@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import SubscribersController from './subscribers.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { SubscriberService } from './subscriber.service';
 
 @Module({
     imports: [ConfigModule],
     controllers: [SubscribersController],
-    providers: [
+    providers: [ SubscriberService,
         {
             provide: 'SUBSCRIBERS_MICRO_SERVICE_RMQ',
             useFactory: (configService: ConfigService) => {
@@ -45,5 +46,6 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
         //     inject: [ConfigService],
         // },
     ],
+    exports:[SubscriberService]
 })
 export class SubscribersModule { }
