@@ -3,6 +3,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { NoteService } from 'src/note/note.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import AddressEntity from './entities/address.entity';
+import { Repository } from 'typeorm';
 
 @Controller('users')
 export class UsersController {
@@ -17,8 +20,25 @@ export class UsersController {
 
   @Get()
   findAll() {
-    
-    return this.usersService.getUsers();
+    return this.usersService.getAllUsers();
+  }
+
+  //@ONE TO ONE
+  @Get('address-users')
+  getAllAddressesWithUsers() {
+    return this.usersService.getAllAddressesWithUsers();
+  }
+
+  //@ONE TO ONE
+  @Get('users-address')
+  getAllUsersWithAddress(){
+    return this.usersService.getAllUsersWithAddress();
+  }
+
+  //@ONE TO MANY
+  @Get(':id/notes')
+  findUserWithNotes(@Param('id') id: string){
+    return this.usersService.getUserWithNotes(Number(id));
   }
   
   @Get(':id/notes/:nId/note-items')
@@ -29,25 +49,16 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.getUser(id);
+    return this.usersService.getUserById(Number(id));
   }
-
-
-  
-
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.usersService.findOne(+id);
-  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(id, updateUserDto);
+    return this.usersService.updateUser(Number(id), updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.removeUser(id);
+    return this.usersService.deleteUser(Number(id));
   }
 }

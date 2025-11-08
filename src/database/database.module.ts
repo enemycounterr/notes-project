@@ -18,8 +18,19 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           __dirname + '/../**/**/*.entity{.ts,.js}',
         ],
         synchronize: true,
+        logging: false,
+        ssl: {
+          rejectUnauthorized: false, // if using a self-signed certificate or untrusted certs
+        },
+        extra: {
+          sslmode:require
+          // ssl: {
+          //   rejectUnauthorized: false, // Disable SSL certificate validation (if needed)
+          // },
+        },
       })
     }),
   ],
 })
-export class DatabaseModule {}
+export class DatabaseModule { }
+
